@@ -14,7 +14,7 @@ Run the following commands
 ```
 cd update-tzdata
 chmod +x update-tzdata.sh
-./update-tzdata.sh
+sudo ./update-tzdata.sh
 ```
 Sponsored by
 
