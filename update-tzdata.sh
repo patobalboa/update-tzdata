@@ -27,11 +27,6 @@ fi
 #Input parameter to set the timezone.
 read -p 'Enter the timezone you want to set (e.g. America/New_York): ' TZ
 
-#If the timezone is not correct, exit the script.
-if ! tzselect -l | grep -q "${TZ}"; then
-  echo "The timezone ${TZ} is not valid."
-  exit 1
-fi
 
 #Download the latest version of the tzdata files.
 echo 'Downloading the latest version of the tzdata db files...' 
@@ -62,7 +57,15 @@ rm -rf ../tzdb-2022c
 
 #Update the tzdata.
 echo 'Updating the tzdata...'
-timedatectl set-timezone ${TZ}
+
+#If the command fails, exit the script.
+if ! timedatectl set-timezone ${TZ} ; then
+  echo 'Error: timedatectl set-timezone failed.'
+  exit 1
+fi
+
+#echo timedatectl status
+timedatectl status | echo
 
 echo 'The tzdata files were updated successfully.'
 exit 0
