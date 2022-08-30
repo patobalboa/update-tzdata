@@ -64,8 +64,8 @@ if ! timedatectl set-timezone ${TZ} ; then
   exit 1
 else
   echo 'Timezone set to '${TZ}
-  #echo timedatectl status
-  timedatectl status | echo
+  echo timedatectl status
+  
   echo 'The tzdata files were updated successfully.'
   exit 0
 fi
