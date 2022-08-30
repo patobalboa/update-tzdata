@@ -23,13 +23,13 @@ if ! hash gcc 2>/dev/null; then
   yum install -y gcc
 fi 
 
-#Define Timezone
-TZ = $1
 
-#If no timezone is defined, exit the script.
-if [[ -z "${TZ}" ]]
-then
-  echo 'No timezone defined.'
+#Input parameter to set the timezone.
+read -p 'Enter the timezone you want to set (e.g. America/New_York): ' TZ
+
+#If the timezone is not correct, exit the script.
+if ! tzselect -l | grep -q "${TZ}"; then
+  echo "The timezone ${TZ} is not valid."
   exit 1
 fi
 
