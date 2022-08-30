@@ -24,7 +24,7 @@ if ! hash gcc 2>/dev/null; then
 fi 
 
 #Define Timezone
-TZ = ${1}
+TZ = $1
 
 #If no timezone is defined, exit the script.
 if [[ -z "${TZ}" ]]
