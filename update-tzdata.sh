@@ -6,6 +6,8 @@
 #It is used to update the tzdata files when a new version of the tzdata files is released.
 #This script is for CentOS 6.x and 7.x
 
+
+
 #Verify that the script is being run with superuser privileges.
 if [[ "${UID}" -ne 0 ]]
 then
