@@ -8,13 +8,10 @@ Clone this repository
 
 ```
 git clone https://github.com/patobalboa/update-tzdata.git
-
 ```
 Run the following commands
 ```
-cd update-tzdata
-chmod +x update-tzdata.sh
-sudo ./update-tzdata.sh
+cd update-tzdata && chmod +x update-tzdata.sh && sudo ./update-tzdata.sh
 ```
 Sponsored by
 
