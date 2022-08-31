@@ -15,37 +15,33 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
+echo "Checking Operating System..."
 #Check if SO is CentOS.
 if [ -f /etc/redhat-release ]; then
+  echo "CentOS detected"
   #Install lzip if it is not installed with yum.
   if ! hash lzip 2>/dev/null; then
-  yum install -y lzip
+   yum install -y lzip
   fi
 
   #Install gcc if it is not installed.
   if ! hash gcc 2>/dev/null; then
-  yum install -y gcc
+    yum install -y gcc
   fi 
 fi
 
 #Check if SO is Ubuntu.
 if [ -f /etc/lsb-release ]; then
+  echo "Ubuntu detected"
   #Install lzip if it is not installed with apt-get.
   if ! hash lzip 2>/dev/null; then
-  apt-get install -y lzip
+    apt-get install -y lzip
   fi
   #Install gcc if it is not installed.
   if ! hash gcc 2>/dev/null; then 
-  apt-get install -y gcc
+    apt-get install -y gcc
   fi  
 fi
-
-
-
-
-#Input parameter to set the timezone.
-read -p 'Enter the timezone you want to set (e.g. America/New_York): ' TZ
-
 
 #Download the latest version of the tzdata files.
 echo 'Downloading the latest version of the tzdata db files...' 
@@ -74,21 +70,46 @@ make install
 echo 'Removing the tzdata directory...'
 rm -rf ../tzdb-2022c
 
+#Input parameter to set the timezone.
+read -p 'Enter the timezone you want to set (e.g. America/New_York): ' TZ
+
 #Update the tzdata.
 echo 'Updating the tzdata...'
 
-#If the command fails, exit the script.
-if ! timedatectl set-timezone ${TZ} ; then
-  echo 'Error: timedatectl set-timezone failed.'
-  exit 1
-else
-  echo 'Timezone set to '${TZ}
-  #Print timedatectl status.
-    timedatectl status
+
+
+#Check if SO is CentOS.
+if [ -f /etc/redhat-release ]; then
+  #If the command fails, exit the script.
+    if ! timedatectl set-timezone ${TZ} ; then
+      echo 'Error: timedatectl set-timezone failed.'
+      exit 1
+    else
+      echo 'Timezone set to '${TZ}
+      #Print timedatectl status.
+      timedatectl status
   
-  echo 'The tzdata files were updated successfully.'
-  exit 0
+      echo 'The tzdata files were updated successfully.'
+      exit 0
+    fi
 fi
+
+#Check if SO is Ubuntu.
+if [ -f /etc/lsb-release ]; then
+#If the command fails, exit the script.
+    if ! timedatectl set-timezone ${TZ} ; then
+      echo 'Error: timedatectl set-timezone failed.'
+      exit 1
+    else
+      echo 'Timezone set to '${TZ}
+      #Print timedatectl status.
+      zdump -v ${TZ} -c $(date '+%Y'),$(date -d '+1 year' '+%Y') | awk -v y=$(date '+%Y') '$6==y && $15~1 {print $4, $3, $6}'
+  
+      echo 'The tzdata files were updated successfully.'
+      exit 0
+    fi
+fi
+
 
 
 
