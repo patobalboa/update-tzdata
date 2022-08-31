@@ -60,11 +60,18 @@ cd tzdb-2022c
 
 #Compile the tzdata files.
 echo 'Compiling the tzdata files...'
-make
+
+if ! make ; then
+  echo 'Compilation failed'
+  exit 1
+fi
 
 #Install the tzdata files.
 echo 'Installing the tzdata files...'
-make install
+if ! make install ; then
+  echo 'Installation failed'
+  exit 1
+fi
 
 #Remove the tzdata directory.
 echo 'Removing the tzdata directory...'
