@@ -7,15 +7,40 @@
 #It is used to update the tzdata files when a new version of the tzdata files is released.
 
 
-#Install lzip if it is not installed with yum.
-if ! hash lzip 2>/dev/null; then
-yum install -y lzip
+
+
+#Check if the script is being run as root or sudo
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
 fi
 
-#Install gcc if it is not installed.
-if ! hash gcc 2>/dev/null; then
-yum install -y gcc
-fi 
+#Check if SO is CentOS.
+if [ -f /etc/redhat-release ]; then
+  #Install lzip if it is not installed with yum.
+  if ! hash lzip 2>/dev/null; then
+  yum install -y lzip
+  fi
+
+  #Install gcc if it is not installed.
+  if ! hash gcc 2>/dev/null; then
+  yum install -y gcc
+  fi 
+fi
+
+#Check if SO is Ubuntu.
+if [ -f /etc/lsb-release ]; then
+  #Install lzip if it is not installed with apt-get.
+  if ! hash lzip 2>/dev/null; then
+  apt-get install -y lzip
+  fi
+  #Install gcc if it is not installed.
+  if ! hash gcc 2>/dev/null; then 
+  apt-get install -y gcc
+  fi  
+fi
+
+
 
 
 #Input parameter to set the timezone.
