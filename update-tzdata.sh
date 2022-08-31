@@ -1,44 +1,22 @@
 #!/bin/bash
 
-#Patricio Balboa - CodePlus.cl
+#Patricio Balboa
+#CodePlus.cl
 
 #This script is used to update the tzdata files.
 #It is used to update the tzdata files when a new version of the tzdata files is released.
 
 
-
-
-#Verify that the script is being run with superuser privileges.
-if [[ "${UID}" -ne 0 ]]
-then
-  echo 'Please run this scritp with sudo or as root.'
-  exit 1
+#Install lzip if it is not installed with yum.
+if ! hash lzip 2>/dev/null; then
+yum install -y lzip
 fi
-#If the system operative is Ubuntu or Centos, then the script will continue.
-if [[ "${ID}" == "ubuntu" ]]
-then
-    #Install lzip if it is not installed.
-    if [[ "$(dpkg -s lzip 2>/dev/null | grep -c 'Status: install ok installed')" -eq 0 ]]
-    then
-        apt-get install lzip
-    fi
-    #Install gcc if it is not installed.
-    if [[ "$(dpkg -s gcc 2>/dev/null | grep -c 'Status: install ok installed')" -eq 0 ]]
-    then
-        apt-get install gcc
-    fi
-elif [[ "${ID}" == "centos" ]]
-then
-    #Install lzip if it is not installed with yum.
-    if ! hash lzip 2>/dev/null; then
-    yum install -y lzip
-    fi
 
-    #Install gcc if it is not installed.
-    if ! hash gcc 2>/dev/null; then
-    yum install -y gcc
-    fi 
-fi
+#Install gcc if it is not installed.
+if ! hash gcc 2>/dev/null; then
+yum install -y gcc
+fi 
+
 
 #Input parameter to set the timezone.
 read -p 'Enter the timezone you want to set (e.g. America/New_York): ' TZ
